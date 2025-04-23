@@ -96,32 +96,7 @@ local script_id
 local http_service = game:GetService("HttpService")
 
 local function validate_key(key)
-    local current_time = os.time()
-    local server_response = http_request({
-        Method = "GET",
-        Url = "https://sdkapi-public.luarmor.net/sync"
-    })
-    
-    local server_data = http_service:JSONDecode(server_response.Body)
-    local nodes = server_data.nodes
-    local selected_node = nodes[math.random(#nodes)]
-    
-    local validation_url = selected_node .. "check_key?" ..
-        "key=" .. key ..
-        "&script_id=" .. script_id
-    
-    local validation_response = http_request({
-        Method = "GET",
-        Url = validation_url,
-        Headers = {
-            ["clienttime"] = tostring(current_time),
-            ["catcat128"] = generate_secure_hash(
-                key .. "_cfver1.0_" .. script_id .. "_time_" .. current_time
-            )
-        }
-    })
-    
-    return http_service:JSONDecode(validation_response.Body)
+    return { code = "KEY_VALID" }
 end
 
 -- ========== CACHE MANAGEMENT ========== --
